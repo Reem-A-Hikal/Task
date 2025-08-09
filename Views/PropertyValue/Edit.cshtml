@@ -1,0 +1,146 @@
+﻿@model PropertyValueViewModel
+
+@{
+    ViewData["Title"] = "Edit Property Value";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+                <div class="card-header bg-primary text-white py-3">
+                    <h2 class="h5 mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Property Value
+                    </h2>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="PropertyId" />
+                        <input type="hidden" asp-for="EmployeeId" />
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted">Employee</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">
+                                    <i class="bi bi-person text-primary"></i>
+                                </span>
+                                <input class="form-control" value="@Model.EmployeeName" disabled />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted">Property</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">
+                                    <i class="bi bi-tag text-primary"></i>
+                                </span>
+                                <input class="form-control" value="@Model.PropertyName" disabled />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted">Type</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">
+                                    <i class="bi bi-list-ul text-primary"></i>
+                                </span>
+                                <input class="form-control" value="@Model.PropertyType" disabled />
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Value" class="form-label fw-semibold">Value</label>
+
+                            @if (Model.PropertyType == "Dropdown")
+                            {
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="bi bi-menu-down text-primary"></i>
+                                    </span>
+                                    @Html.DropDownListFor(model => model.Value, Model.Options ?? new List<SelectListItem>(),
+                                    "Select an option", new { @class = "form-select" })
+                                </div>
+                            }
+                            else if (Model.PropertyType == "Integer")
+                            {
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="bi bi-123 text-primary"></i>
+                                    </span>
+                                    @Html.TextBoxFor(model => model.Value, new {
+                                        @class = "form-control",
+                                        type = "number",
+                                        placeholder = "Enter numeric value"
+                                    })
+                                </div>
+                            }
+                            else if (Model.PropertyType == "Date")
+                            {
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="bi bi-calendar text-primary"></i>
+                                    </span>
+                                    @Html.TextBoxFor(model => model.Value, new {
+                                        @class = "form-control",
+                                        type = "date",
+                                        value = (DateTime.TryParse(Model.Value, out var date) ? date.ToString("yyyy-MM-dd") : "")
+                                    })
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="bi bi-text-left text-primary"></i>
+                                    </span>
+                                    @Html.TextBoxFor(model => model.Value, new {
+                                        @class = "form-control",
+                                        placeholder = "Enter value"
+                                    })
+                                </div>
+                            }
+                            @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger small mt-1 d-block" })
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="bi bi-x-lg me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="bi bi-check-lg me-1"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .form-control:focus, .form-select:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            border: none;
+        }
+
+        .form-control[disabled] {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
+    </style>
+}
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

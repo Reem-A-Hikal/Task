@@ -1,0 +1,152 @@
+﻿@model EmployeeCreateViewModel
+
+@{
+    ViewData["Title"] = "Edit Employee";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+                <div class="card-header bg-primary text-white py-3">
+                    <h2 class="h5 mb-0">
+                        <i class="bi bi-person-gear me-2"></i>Edit Employee
+                    </h2>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4"></div>
+                        <input asp-for="Id" type="hidden" />
+
+                        <div class="row g-3">
+                            <!-- Basic Information Section -->
+                            <div class="col-12">
+                                <h5 class="fw-semibold text-primary mb-3">Basic Information</h5>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Code" class="form-label fw-semibold">Employee Code</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="bi bi-person-badge text-primary"></i>
+                                    </span>
+                                    <input asp-for="Code" class="form-control" placeholder="Enter employee code" />
+                                </div>
+                                <span asp-validation-for="Code" class="text-danger small mt-1"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Name" class="form-label fw-semibold">Full Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="bi bi-person text-primary"></i>
+                                    </span>
+                                    <input asp-for="Name" class="form-control" placeholder="Enter employee name" />
+                                </div>
+                                <span asp-validation-for="Name" class="text-danger small mt-1"></span>
+                            </div>
+
+                            <!-- Custom Properties Section -->
+                            @if (Model.CustomProperties != null && Model.CustomProperties.Any())
+                            {
+                                <div class="col-12 mt-4">
+                                    <h5 class="fw-semibold text-primary mb-3">Additional Information</h5>
+                                </div>
+
+                                @for (int i = 0; i < Model.CustomProperties.Count; i++)
+                                {
+                                    var property = Model.CustomProperties[i];
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-semibold">@property.Name</label>
+                                        <input type="hidden" asp-for="CustomProperties[@i].PropertyDefinitionId" />
+                                        <input type="hidden" asp-for="CustomProperties[@i].Name" />
+                                        <input type="hidden" asp-for="CustomProperties[@i].Type" />
+
+                                        @if (property.Type == PropertyType.Dropdown.ToString())
+                                        {
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">
+                                                    <i class="bi bi-list-ul text-primary"></i>
+                                                </span>
+                                                @Html.DropDownListFor(
+                                                emp => emp.CustomProperties[i].Value,
+                                                        property.DropdownOptions,
+                                                        "Select an option",
+                                                        new { @class = "form-select", required = property.IsRequired ? "required" : null }
+                                                    )
+                                            </div>
+                                        }
+                                        else if (property.Type == PropertyType.Integer.ToString())
+                                        {
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">
+                                                    <i class="bi bi-123 text-primary"></i>
+                                                </span>
+                                                <input asp-for="CustomProperties[@i].Value" type="number" class="form-control"
+                                                       required="@property.IsRequired" placeholder="Enter @property.Name" />
+                                            </div>
+                                        }
+                                        else if (property.Type == PropertyType.Date.ToString())
+                                        {
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">
+                                                    <i class="bi bi-calendar text-primary"></i>
+                                                </span>
+                                                <input asp-for="CustomProperties[@i].Value" type="date" class="form-control"
+                                                       required="@property.IsRequired" />
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-light">
+                                                    <i class="bi bi-text-left text-primary"></i>
+                                                </span>
+                                                <input asp-for="CustomProperties[@i].Value" class="form-control"
+                                                       required="@property.IsRequired" placeholder="Enter @property.Name" />
+                                            </div>
+                                        }
+                                        <span asp-validation-for="CustomProperties[@i].Value" class="text-danger small mt-1"></span>
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="bi bi-arrow-left me-1"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="bi bi-save me-1"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .form-control:focus, .form-select:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            border: none;
+        }
+    </style>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

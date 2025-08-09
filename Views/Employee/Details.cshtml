@@ -1,0 +1,112 @@
+﻿@model EmployeeViewModel
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary">
+            <i class="bi bi-person-badge me-2"></i>Employee Details
+        </h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Back to List
+        </a>
+    </div>
+
+    <div class="d-flex justify-content-around align-items-center flex-wrap flex-column">
+        <div class="card shadow-sm rounded-3 overflow-hidden mb-4" style="min-width: 60%">
+            <div class="card-header bg-light py-3">
+                <h5 class="card-title mb-0 fw-semibold">
+                    <i class="bi bi-info-circle me-2"></i>Basic Informations
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small mb-1">Employee Code</label>
+                            <div class="p-2 bg-light rounded-2 fw-medium">@Model.Code</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small mb-1">Employee Name</label>
+                            <div class="p-2 bg-light rounded-2 fw-medium">@Model.Name</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.CustomProperties != null && Model.CustomProperties.Any())
+        {
+            <div class="card shadow-sm rounded-3 overflow-hidden" style="min-width: 60%">
+                <div class="card-header bg-light py-3">
+                    <h5 class="card-title mb-0 fw-semibold">
+                        <i class="bi bi-list-check me-2"></i>Additional Information
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Property Name</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var prop in Model.CustomProperties)
+                                {
+                                    <tr>
+                                        <td class="ps-4 fw-medium">@prop.PropertyName</td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(prop.Value))
+                                            {
+                                                <span class="badge bg-light text-dark">@prop.Value</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Not specified</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info" style="min-width: 60%">
+                <i class="bi bi-info-circle me-2"></i>No Additional Informations found for this employee.
+            </div>
+        }
+    </div>
+
+    <div class="d-flex justify-content-end mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary px-4 me-2">
+            <i class="bi bi-pencil me-1"></i> Edit Employee
+        </a>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+    .card {
+        border: none;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.05);
+    }
+
+    .badge {
+        padding: 0.35em 0.65em;
+        font-weight: normal;
+    }
+</style>
+}

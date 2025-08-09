@@ -1,0 +1,81 @@
+﻿@model IEnumerable<PropertyValueViewModel>
+
+@{
+    ViewData["Title"] = "Property Values";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="col">
+            <h2 class="fw-bold text-primary">
+                <i class="bi bi-card-list me-2"></i>Property Values
+            </h2>
+            <p class="text-muted ms-5">Manage your PropertiesValues</p>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="py-3 ps-4 text-start">@Html.DisplayNameFor(model => model.EmployeeName)</th>
+                            <th class="py-3 ps-4 text-start">@Html.DisplayNameFor(model => model.PropertyName)</th>
+                            <th class="py-3 ps-4 text-start">@Html.DisplayNameFor(model => model.PropertyType)</th>
+                            <th class="py-3 ps-4 text-start">@Html.DisplayNameFor(model => model.Value)</th>
+                            @* <th class="text-end py-3 pe-4">Actions</th> *@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="py-3 ps-4">
+                                    <span class="fw-medium">@Html.DisplayFor(modelItem => item.EmployeeName)</span>
+                                </td>
+                                <td class="py-3 ps-4">@Html.DisplayFor(modelItem => item.PropertyName)</td>
+                                <td class="py-3 ps-4">
+                                    <span class="badge bg-dark text-light">@Html.DisplayFor(modelItem => item.PropertyType)</span>
+                                </td>
+                                <td class="py-3 ps-4">
+                                    @if (!string.IsNullOrEmpty(item.Value?.ToString()))
+                                    {
+                                        <span class="badge bg-light text-dark">@Html.DisplayFor(modelItem => item.Value)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">N/A</span>
+                                    }
+                                </td>
+                                @* <td class="text-end pe-4">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                </td> *@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .table-hover tbody tr:hover {
+            background-color: rgba(13, 110, 253, 0.05);
+        }
+
+        .badge {
+            padding: 0.35em 0.65em;
+            font-weight: 500;
+        }
+
+        .table th {
+            border-top: none;
+            border-bottom: 1px solid #dee2e6;
+        }
+    </style>
+}

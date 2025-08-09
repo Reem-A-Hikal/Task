@@ -48,6 +48,8 @@ namespace EmployeeCustomProp.Controllers
             if (!ModelState.IsValid) return View(model);
 
             await _propertyDefinitionService.AddPropertyAsync(model);
+
+            TempData["SuccessMessage"] = "Property created successfully.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -73,6 +75,8 @@ namespace EmployeeCustomProp.Controllers
             _mapper.Map(Vmodel, existingProperty);
 
             await _propertyDefinitionService.UpdatePropertyAsync(existingProperty);
+
+            TempData["SuccessMessage"] = "Property updated successfully.";
             return RedirectToAction(nameof(Index));
         }
     }

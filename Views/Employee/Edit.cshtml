@@ -64,6 +64,12 @@
 
                                         @if (property.Type == PropertyType.Dropdown.ToString())
                                         {
+                                            var dropdownAttributes = new Dictionary<string, object> { { "class", "form-select" } };
+                                            if (property.IsRequired)
+                                            {
+                                                dropdownAttributes.Add("required", "required");
+                                            }
+
                                             <div class="input-group">
                                                 <span class="input-group-text bg-light">
                                                     <i class="bi bi-list-ul text-primary"></i>
@@ -72,7 +78,7 @@
                                                 emp => emp.CustomProperties[i].Value,
                                                         property.DropdownOptions,
                                                         "Select an option",
-                                                        new { @class = "form-select", required = property.IsRequired ? "required" : null }
+                                                        dropdownAttributes
                                                     )
                                             </div>
                                         }

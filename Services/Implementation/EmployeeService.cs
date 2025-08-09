@@ -109,6 +109,11 @@ namespace EmployeeCustomProp.Services.Implementation
                     .FirstOrDefault(pv => pv.PropertyDefinitionId == prop.PropertyDefinitionId);
                 if (existingValue != null)
                 {
+                    if (string.IsNullOrWhiteSpace(prop.Value) && existingValue.PropertyDefinition.IsRequired == false)
+                    {
+                        employee.PropertyValues.Remove(existingValue);
+                        continue;
+                    }
                     existingValue.Value = prop.Value;
                 }
                 else

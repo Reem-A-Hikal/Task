@@ -40,17 +40,6 @@ namespace EmployeeCustomProp.Profiles
                 })
             );
 
-            //CreateMap<EmployeeViewModel, Employee>()
-            //.ForMember(dest => dest.PropertyValues,
-            //    opt => opt.MapFrom(src =>
-            //        src.CustomProperties != null
-            //        ? src.CustomProperties.Select(cp => new PropertyValue
-            //        {
-            //            Value = cp.Value
-            //        }).ToList()
-            //        : new List<PropertyValue>()
-            //    )
-            //);
         }
     }
 }
